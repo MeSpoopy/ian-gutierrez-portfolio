@@ -279,7 +279,7 @@ footer a { display:inline-flex; }
 .evidence-gallery figure { margin:0; min-width:0; }
 .evidence-gallery figure:first-child { grid-column:1/-1; }
 .evidence-link { display:block; overflow:hidden; border:1px solid var(--line); background:#f0f0f2; border-radius:8px; }
-.evidence-link img { display:block; width:100%; max-height:620px; object-fit:contain; }
+.evidence-link img { display:block; width:100%; height:auto; max-height:620px; object-fit:contain; }
 .evidence-link>span { display:flex; gap:1rem; justify-content:space-between; align-items:center; min-height:44px; padding:.6rem 1rem; background:var(--surface); color:var(--text); font-size:.875rem; }
 .evidence-link:hover>span { color:var(--accent); }
 .evidence-gallery figcaption { color:var(--muted); margin-top:.7rem; font-size:.875rem; }
@@ -382,3 +382,51 @@ nav { gap:.65rem; }
 .viewer-close { padding:.4rem .6rem; }
 }
 .hero-art { width:100%; min-width:0; aspect-ratio:auto; }
+
+/* Supplied organization logos and certificate images */
+.organization-heading { display:flex; align-items:center; gap:1rem; margin:1rem 0; }
+.organization-heading h3 { margin:0; min-width:0; }
+.organization-logo { display:block; width:60px; height:60px; flex:0 0 60px; object-fit:contain; border:1px solid var(--line); border-radius:8px; background:#fff; }
+.education-issuer { display:flex; align-items:center; gap:.8rem; margin:.5rem 0; }
+.education-issuer .organization-logo { width:44px; height:44px; flex-basis:44px; }
+.education-issuer p { margin:0; }
+.project-brand { display:flex; align-items:center; gap:.65rem; }
+.project-brand span { min-width:0; }
+.project-logo { display:block; width:32px; height:32px; flex:0 0 32px; border-radius:5px; object-fit:contain; background:#fff; }
+.recognition-issuer { display:flex; align-items:center; gap:1rem; max-width:340px; }
+.recognition-issuer p { margin:0; }
+.recognition-grid { gap:1.5rem; }
+.recognition-card { display:block; min-width:0; padding:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.credential-preview { display:block; height:100%; }
+.credential-preview:hover .credential-action { color:var(--text); }
+.credential-preview:focus-visible { outline-offset:-3px; border-radius:9px; }
+.credential-media { display:block; position:relative; width:100%; aspect-ratio:1.616; overflow:hidden; background:#f3f3f5; }
+.credential-media img { display:block; width:100%; height:100%; object-fit:contain; }
+.credential-copy { display:block; padding:1.3rem 1.4rem 1.1rem; }
+.recognition-card .small-label { font-size:.875rem; }
+.credential-copy h3,.credential-copy h4 { font-size:1.35rem; line-height:1.35; letter-spacing:-.02em; margin:.65rem 0 .5rem; }
+.credential-copy p { color:var(--muted); margin:.5rem 0; font-size:1rem; }
+.credential-action { display:flex; justify-content:space-between; align-items:center; gap:1rem; min-height:44px; color:var(--accent); font-size:.875rem; margin-top:.4rem; }
+.learning { margin-top:3rem; }
+.certificate-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem; }
+.certificate-card { min-width:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
+.certificate-card>.credential-preview { height:auto; flex:1; }
+.certificate-card .credential-media { background:#fff; }
+.credential-issuer { display:flex; align-items:center; gap:.6rem; font-size:.875rem; color:var(--muted); }
+.issuer-logo { width:36px; height:36px; flex:0 0 36px; object-fit:contain; border-radius:5px; background:#fff; }
+.ef-certificate img { position:absolute; left:17.2%; top:0; width:65.6%; height:auto; max-width:none; }
+.certificate-card>.supporting-photo { display:flex; align-items:center; gap:.8rem; flex:0; height:auto; margin:0 1.4rem 1.3rem; padding-top:1rem; border-top:1px solid var(--line); font-size:.875rem; color:var(--accent); }
+.supporting-photo img { display:block; width:42px; height:56px; object-fit:cover; border-radius:4px; }
+.credential-list { list-style:none; padding:0; }
+.credential-list li { display:flex; gap:.85rem; align-items:center; margin:1rem 0; }
+.additional-credentials { margin-top:1.5rem; }
+@media(max-width:760px) {
+  .recognition-grid,.certificate-grid { grid-template-columns:1fr; gap:1.25rem; }
+  .recognition-card { display:block; padding:0; }
+  .recognition-issuer { margin-top:1.25rem; }
+  .credential-copy { padding:1rem 1.1rem; }
+  .education-issuer { flex-direction:column; align-items:flex-start; gap:.5rem; }
+  .organization-heading { gap:.85rem; }
+  .organization-logo { width:52px; height:52px; flex-basis:52px; }
+  .certificate-card>.supporting-photo { margin:0 1.1rem 1.1rem; }
+}
