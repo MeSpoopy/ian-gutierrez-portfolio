@@ -436,3 +436,52 @@ nav { gap:.65rem; }
 .course-issuer { gap:.85rem; }
 .course-issuer>span { min-width:0; }
 @media(max-width:520px) { .course-issuer .issuer-logo { width:56px; height:56px; flex-basis:56px; } }
+
+/* Portfolio usability refinements */
+.project-card-link { display:flex; flex-direction:column; align-items:flex-start; height:100%; width:100%; border-radius:8px; }
+.project-card-link .project-description { color:var(--muted); margin:0 0 1rem; }
+.project-card-link .text-link { margin-top:auto; }
+.project-card-link:hover h3,.project-card-link:focus-visible h3 { color:var(--accent); }
+.project-card-link:hover .project-image img { opacity:.88; }
+.copy-contact { margin-top:.7rem; }
+.copy-email { min-height:44px; padding:.5rem 1rem; border:1px solid #696b74; border-radius:24px; background:transparent; font-size:.875rem; }
+.copy-email:hover { background:var(--text); color:var(--bg); }
+.copy-email[hidden] { display:none; }
+.copy-status { display:block; min-height:1.5em; color:var(--accent); font-size:.875rem; margin-top:.35rem; }
+.case-contact-options { display:flex; flex-wrap:wrap; align-items:flex-start; gap:.5rem 1.5rem; margin:-.5rem 0 2.5rem; }
+.case-contact-options>a { min-height:44px; display:inline-flex; align-items:center; overflow-wrap:anywhere; }
+.case-contact-options .copy-contact { margin:0; }
+.evidence-note summary { min-height:44px; font-size:1.1rem; font-weight:500; }
+.evidence-note[open] summary { margin-bottom:.75rem; }
+.viewer-toolbar { flex-wrap:wrap; gap:.4rem .7rem; }
+.viewer-original { display:inline-flex; align-items:center; min-height:44px; color:var(--accent); font-size:.875rem; padding:0 .3rem; }
+.viewer-help { margin-left:auto; }
+.viewer-head>div { min-width:0; }
+.viewer-head h2 { overflow-wrap:anywhere; }
+.recognition-card .credential-copy h3 { font-size:1.25rem; }
+@media(min-width:1100px) {
+  .recognition-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem; }
+  .recognition-card .credential-copy { padding:1rem; }
+}
+@media(max-width:760px) {
+  html { scroll-padding-top:8.5rem; }
+  .portfolio-header { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 .5rem; padding:.45rem 0; }
+  .portfolio-header .wordmark { justify-self:start; grid-row:1; grid-column:1; }
+  .portfolio-header nav { display:contents; }
+  .portfolio-header nav>a:not(.nav-contact) { grid-row:2; min-height:44px; font-size:.875rem; }
+  .portfolio-header .nav-contact { grid-row:1; grid-column:3; justify-self:end; white-space:nowrap; }
+  .recognition-card .credential-preview { display:grid; grid-template-columns:110px minmax(0,1fr); gap:1rem; padding:1rem; align-items:center; }
+  .recognition-card .credential-media { border-radius:5px; }
+  .recognition-card .credential-copy { padding:0; min-width:0; }
+  .recognition-card .credential-copy h3 { font-size:1.2rem; margin:.4rem 0 .15rem; }
+  .recognition-card .credential-copy p { display:none; }
+  .recognition-card .small-label { font-size:.875rem; letter-spacing:0; }
+  .recognition-card .credential-action { margin:0; }
+  .viewer-head { padding:.75rem; gap:.6rem; }
+  .viewer-toolbar { padding:.5rem .75rem; }
+  .viewer-help { width:100%; max-width:none; margin:0; }
+  .case-contact-options { flex-direction:column; gap:.5rem; }
+}
+@media(max-width:360px) {
+  .recognition-card .credential-preview { grid-template-columns:85px minmax(0,1fr); gap:.75rem; padding:.75rem; }
+}
