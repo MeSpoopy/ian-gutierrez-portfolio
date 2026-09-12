@@ -1,6 +1,51 @@
 const year = document.getElementById('year');
 if (year) year.textContent = new Date().getFullYear();
 
+// Content stays visible without JavaScript. Each entrance runs once, before reading.
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+if ('IntersectionObserver' in window && typeof Element.prototype.animate === 'function' && !motionPreference.matches) {
+  const activeEntrances = new Set();
+  const entranceObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entranceObserver.unobserve(entry.target);
+      if (motionPreference.matches) return;
+      const animation = entry.target.animate([
+        { opacity: 0.35, transform: 'translateY(14px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: 550, easing: 'cubic-bezier(.2,.7,.2,1)' });
+      activeEntrances.add(animation);
+      animation.onfinish = () => activeEntrances.delete(animation);
+      animation.oncancel = () => activeEntrances.delete(animation);
+    });
+  }, { rootMargin: '0px 0px 60px 0px', threshold: 0.01 });
+  document.querySelectorAll('.section-heading,.project-card,.approach-card,.case-facts,.case-narrative section').forEach(element => {
+    if (element.getBoundingClientRect().top > window.innerHeight) entranceObserver.observe(element);
+  });
+  motionPreference.addEventListener('change', event => {
+    if (!event.matches) return;
+    entranceObserver.disconnect();
+    activeEntrances.forEach(animation => animation.cancel());
+    activeEntrances.clear();
+  });
+}
+
+// Keep the compact homepage navigation oriented to the section being read.
+const primaryLinks = [...document.querySelectorAll('.portfolio-header nav a[href^="#"]')];
+if (primaryLinks.length && 'IntersectionObserver' in window) {
+  const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const section = entry.target.id === 'background' ? 'about' : entry.target.id;
+      primaryLinks.forEach(link => {
+        if (link.hash === '#' + section) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    });
+  }, { rootMargin: '-15% 0px -60% 0px', threshold: 0 });
+  document.querySelectorAll('main > section[id]').forEach(section => sectionObserver.observe(section));
+}
+
 const previewLinks = document.querySelectorAll('a[data-preview]');
 if (previewLinks.length && typeof HTMLDialogElement !== 'undefined') {
   const dialog = document.createElement('dialog');
