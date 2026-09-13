@@ -24,27 +24,15 @@ The case studies distinguish demonstrated interfaces and workflows from unverifi
 
 Visual inspiration: [Videaste on Dribbble](https://dribbble.com/shots/23090247-Videaste-Personal-Videographer-Portfolio-Landing-Page-Website).
 
-## Policies and owner access
+## Policies and owner analytics
 
 - terms.html and privacy.html describe the portfolio and its current data practices.
-- admin.html is a public owner entry page, excluded from search indexing. It is not an authentication boundary and currently displays setup pending.
-- Footer links are included on the homepage, all nine case studies, and these three pages.
+- admin.html is a public entry page linking to the authenticated Cloudflare dashboard, not an authentication boundary. No private statistics or login credentials are embedded.
+- analytics.js loads the official Cloudflare module on the production hostname and portfolio path only. It is included on the home page, nine case studies, and two policy pages. The Admin page and local previews are excluded.
+- The beacon identifier is public by design. Never add Cloudflare API tokens or account passwords to this repository.
+- Reporting began on 13 September 2026. Cloudflare reports visits and page views, not exact unique people. Location is approximate country, not GPS or city.
+- Dashboard data is protected by Cloudflare account authentication. Hosting remains on GitHub Pages.
+- If other projects are later connected to this same analytics site, filter paths to /ian-gutierrez-portfolio/ when viewing reports.
+- Keep the privacy policy synchronized with any tracking changes. To disable collection, remove the analytics.js script includes from public pages and update the policy.
 
-Audience analytics are NOT configured. No visitor counts or countries are collected by an added analytics script. GitHub still processes hosting/security logs, and Google Fonts receives font requests.
-
-### Connecting private analytics
-
-The owner must choose and sign into an analytics provider before real reports can be enabled. Cloudflare Web Analytics is a suitable option for visits, page views, paths, and country breakdowns without moving GitHub Pages hosting:
-https://developers.cloudflare.com/web-analytics/get-started/
-
-1. In the owner's Cloudflare account, add mespoopy.github.io as a Web Analytics site and choose manual JavaScript installation.
-2. Obtain the site's public beacon snippet and owner dashboard URL. Never commit a Cloudflare API token, account password, or other secret to this public repository.
-3. Include the official snippet on the homepage and case studies, plus any policy pages intended to be measured. Exclude the admin entry page and local previews. The hostname covers other projects too; use the /ian-gutierrez-portfolio/ path filter when reviewing this portfolio.
-4. Update privacy.html BEFORE activating collection, naming the actual provider, collected metrics, approximate country information, purpose, provider privacy information, and retention limits verified at setup time.
-5. Update admin.html with an owner dashboard link and clear sign-in text. Authentication and reporting must remain at the provider, not in public JavaScript. A custom dashboard would require a separately secured backend.
-6. Verify a real page view appears in the authenticated report before changing the setup-pending state. Do not invent data or imply earlier visits can be recovered.
-
-Cloudflare reports visits and page views, not a verified number of unique people. Its location dimension is country, not precise GPS, street address, or city:
-https://developers.cloudflare.com/web-analytics/data-metrics/dimensions/
-
-Keep the published Privacy Policy consistent with the implementation whenever data practices change.
+Provider documentation: https://developers.cloudflare.com/web-analytics/
