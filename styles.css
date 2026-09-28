@@ -98,6 +98,7 @@ summary::-webkit-details-marker { display:none; }
 summary:hover { color:var(--accent); }
 .details-symbol { flex-shrink:0; font:400 1.6rem/1 var(--body); transition:transform 180ms; }
 details[open] .details-symbol { transform:rotate(45deg); }
+.work-group-title { font-size:1.3rem; margin:2.5rem 0 1rem; }
 .more-projects { margin-top:2rem; }
 .project-list { display:grid; grid-template-columns:1fr 1fr; column-gap:2.5rem; }
 .project-row { display:flex; align-items:center; gap:1rem; min-height:88px; padding:1rem 0; border-top:1px solid var(--line); }
