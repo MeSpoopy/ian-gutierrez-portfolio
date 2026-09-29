@@ -143,9 +143,10 @@ function Constellation() {
   );
 }
 
-function Engine({ paused, pointer }: { paused: boolean; pointer: RefObject<Pointer> }) {
+function Engine({ paused, pointer, scroll }: { paused: boolean; pointer: RefObject<Pointer>; scroll: RefObject<number> }) {
   const sculpture = useRef<Group>(null);
   const core = useRef<Group>(null);
+  const rings = useRef<Group>(null);
   const satelliteOne = useRef<Mesh>(null);
   const satelliteTwo = useRef<Mesh>(null);
   const satelliteThree = useRef<Mesh>(null);
@@ -165,11 +166,19 @@ function Engine({ paused, pointer }: { paused: boolean; pointer: RefObject<Point
     );
     sculpture.current.rotation.y = MathUtils.damp(
       sculpture.current.rotation.y,
-      pointer.current.x * 0.2 - 0.1 + Math.sin(elapsed * 0.15) * 0.15,
+      pointer.current.x * 0.2 - 0.1 + Math.sin(elapsed * 0.15) * 0.15 + scroll.current * 0.65,
       3,
       delta,
     );
     sculpture.current.position.y = Math.sin(elapsed * 0.48) * 0.065;
+    sculpture.current.rotation.z = MathUtils.damp(sculpture.current.rotation.z, scroll.current * -0.18, 4, delta);
+    if (rings.current) {
+      rings.current.children.forEach((ring, i) => {
+        const origins = [[-0.6, 0.4, 0], [0.66, 0.18, 0.08], [0.08, -0.63, 0.24]];
+        const [x, y, z] = origins[i];
+        ring.position.set(MathUtils.damp(ring.position.x, x * (1 + scroll.current * 0.45), 4, delta), MathUtils.damp(ring.position.y, y * (1 + scroll.current * 0.45), 4, delta), z);
+      });
+    }
 
     if (core.current) {
       core.current.rotation.y += delta * 0.22;
@@ -187,6 +196,7 @@ function Engine({ paused, pointer }: { paused: boolean; pointer: RefObject<Point
       <Circuit radius={2.43} inclination={0.6} />
       <Circuit radius={2.78} inclination={-0.9} />
 
+      <group ref={rings}>
       <group position={[-0.6, 0.4, 0]} rotation={[0.46, -0.2, -0.31]}>
         <mesh>
           <torusGeometry args={[1.2, 0.245, 28, 112]} />
@@ -229,6 +239,7 @@ function Engine({ paused, pointer }: { paused: boolean; pointer: RefObject<Point
         </mesh>
       </group>
 
+      </group>
       <group ref={core} position={[0.03, 0.11, 0.55]}>
         <mesh rotation={[0.25, 0.5, 0.3]}>
           <icosahedronGeometry args={[0.34, 0]} />
@@ -261,6 +272,20 @@ function Engine({ paused, pointer }: { paused: boolean; pointer: RefObject<Point
 
 export default function Scene({ paused, onFailure }: SceneProps) {
   const pointer = useRef<Pointer>({ x: 0, y: 0 });
+  const host = useRef<HTMLDivElement>(null);
+  const scroll = useRef(0);
+  useEffect(() => {
+    if (paused) return;
+    const update = () => {
+      const hero = host.current?.closest('.hero');
+      if (!hero) return;
+      const bounds = hero.getBoundingClientRect();
+      scroll.current = MathUtils.clamp(-bounds.top / bounds.height, 0, 1);
+    };
+    update();
+    window.addEventListener('scroll', update, {passive:true});
+    return () => window.removeEventListener('scroll', update);
+  }, [paused]);
   const [failed, setFailed] = useState(false);
   const reportedFailure = useRef(false);
   const failureCallback = useRef(onFailure);
@@ -275,6 +300,7 @@ export default function Scene({ paused, onFailure }: SceneProps) {
 
   return (
     <div
+      ref={host}
       aria-hidden="true"
       data-scene-state={failed ? "unavailable" : paused ? "paused" : "active"}
       style={{ width: "100%", height: "100%", touchAction: "pan-y" }}
@@ -305,7 +331,7 @@ export default function Scene({ paused, onFailure }: SceneProps) {
             }}
           >
             <Studio onFailure={handleFailure} />
-            <Engine paused={paused} pointer={pointer} />
+            <Engine paused={paused} pointer={pointer} scroll={scroll} />
           </Canvas>
         </SceneBoundary>
       )}

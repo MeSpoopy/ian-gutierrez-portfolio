@@ -301,3 +301,68 @@ html:has(:focus-visible) [data-reveal].revealed * {
     transform: none !important;
   }
 }
+
+/* Connected motion: scroll opens the system; the pointer brings its work forward. */
+@media (prefers-reduced-motion: no-preference) {
+  .capabilities-head.revealed h2,
+  .education-heading.revealed h2 {
+    animation: heading-arrive 650ms var(--ease-out) both;
+  }
+  .contact-heading.revealed h2 {
+    animation: contact-unfold 750ms var(--ease-out) both;
+  }
+  .contact-heading.revealed .contact-orb {
+    animation: invitation-arrive 700ms var(--ease-out) 80ms both;
+  }
+  .expand-icon { transition: transform 240ms var(--ease-out); }
+  .archive-row { animation: archive-enter 280ms var(--ease-out) both; }
+  .project-screen { transition: transform 450ms var(--ease-out); }
+  .award-art img { transition: transform 500ms var(--ease-out); }
+  .nav-links>a:not(.nav-cta) { position:relative; }
+  .nav-links>a:not(.nav-cta)::after {
+    content:''; position:absolute; bottom:-7px; left:0; right:0; height:1px;
+    background:currentColor; transform:scaleX(0); transform-origin:right;
+    transition:transform 260ms var(--ease-out);
+  }
+  .nav-links>a:not(.nav-cta):hover::after {
+    transform:scaleX(1); transform-origin:left;
+  }
+  @supports (animation-timeline: view()) {
+    .education-portrait {
+      animation: portrait-depth linear both;
+      animation-timeline:view(); animation-range:entry 0% exit 100%;
+    }
+    .section-marker {
+      transform-origin:left;
+      animation: section-connect linear both;
+      animation-timeline:view(); animation-range:entry 0% entry 100%;
+    }
+  }
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .feature-visual:hover .project-screen {
+    transform:perspective(1100px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) translateY(-7px) scale(1.025);
+  }
+  .feature-visual .visual-header>svg { transition:transform 350ms var(--ease-out); }
+  .feature-visual:hover .visual-header>svg { transform:translate(4px,-4px) rotate(5deg); }
+  .award:hover .award-art img { transform:scale(1.045); }
+  .button>svg,.nav-cta>svg,.contact-orb>svg { transition:transform 300ms var(--ease-out); }
+  .button:hover>svg { transform:translateY(3px); }
+  .nav-cta:hover>svg { transform:translate(3px,-3px); }
+  .contact-orb:hover>svg { transform:translate(5px,-5px); }
+}
+@keyframes contact-unfold {
+  from { clip-path:inset(0 0 12% 0); transform:translateY(18px); opacity:.8; }
+  to { clip-path:inset(0); transform:none; opacity:1; }
+}
+@keyframes invitation-arrive {
+  from { rotate:-25deg; scale:.9; }
+  to { rotate:0deg; scale:1; }
+}
+@keyframes archive-enter { from { opacity:.6; translate:0 5px; } to { opacity:1; translate:0 0; } }
+@keyframes portrait-depth { from { translate:0 12px; } to { translate:0 -12px; } }
+@keyframes section-connect { from { transform:scaleX(.15); } to { transform:scaleX(1); } }
+@media (prefers-reduced-motion:reduce) {
+  .education-portrait,.section-marker,.archive-row,.contact-orb { animation:none!important; }
+  .award-art img,.contact-orb>svg,.button>svg,.nav-cta>svg { transform:none!important; transition:none; }
+}
