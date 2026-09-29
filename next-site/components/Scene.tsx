@@ -14,18 +14,18 @@ import {
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   ACESFilmicToneMapping,
-  BufferGeometry,
-  Float32BufferAttribute,
+  Shape,
+  Path,
+  ExtrudeGeometry,
   MathUtils,
   PMREMGenerator,
-  Vector3,
   type Group,
-  type Mesh,
 } from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 
 type SceneProps = {
   paused: boolean;
+  activeIndex: number;
   onFailure?: () => void;
 };
 
@@ -91,186 +91,63 @@ function Studio({ onFailure }: { onFailure: () => void }) {
   );
 }
 
-function orbitPoint(angle: number, radius: number, inclination: number) {
-  return new Vector3(
-    Math.cos(angle) * radius,
-    Math.sin(angle) * radius * 0.56,
-    Math.sin(angle + inclination) * 0.64 - 0.45,
-  );
+function roundedPath<T extends Shape | Path>(path: T, w: number, h: number, r: number): T {
+  const x=-w/2, y=-h/2;
+  path.moveTo(x+r,y); path.lineTo(x+w-r,y); path.quadraticCurveTo(x+w,y,x+w,y+r);
+  path.lineTo(x+w,y+h-r); path.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  path.lineTo(x+r,y+h); path.quadraticCurveTo(x,y+h,x,y+h-r);
+  path.lineTo(x,y+r); path.quadraticCurveTo(x,y,x+r,y); path.closePath();
+  return path;
 }
 
-function Circuit({ radius, inclination }: { radius: number; inclination: number }) {
-  const geometry = useMemo(() => {
-    const points = Array.from({ length: 120 }, (_, index) =>
-      orbitPoint((index / 120) * Math.PI * 2, radius, inclination),
-    );
-    return new BufferGeometry().setFromPoints(points);
-  }, [radius, inclination]);
+const origins = [[-0.64,0.39,0], [0.72,0.18,0.09], [0.03,-0.6,0.28]];
+const turns:[number,number,number][] = [[0.22,-0.25,-0.26], [1.14,0.18,0.44], [0.12,1.12,-0.5]];
+const finishes = ['#d5f26d','#e3e9df','#496b57'];
 
-  useEffect(() => () => geometry.dispose(), [geometry]);
-
-  return (
-    <lineLoop geometry={geometry}>
-      <lineBasicMaterial color="#d5f26d" transparent opacity={0.26} />
-    </lineLoop>
-  );
-}
-
-function Constellation() {
-  const geometry = useMemo(() => {
-    const positions: number[] = [];
-    for (let i = 0; i < 38; i += 1) {
-      const angle = i * 2.399963;
-      const radius = 2.15 + ((i * 17) % 13) / 13;
-      positions.push(
-        Math.cos(angle) * radius,
-        Math.sin(angle) * radius * 0.85,
-        -1.9 - ((i * 7) % 9) / 5,
-      );
+function Engine({paused,pointer,scroll,activeIndex}:{paused:boolean;pointer:RefObject<Pointer>;scroll:RefObject<number>;activeIndex:number}) {
+  const sculpture=useRef<Group>(null);
+  const time=useRef(0);
+  const {invalidate}=useThree();
+  const geometry=useMemo(()=>{
+    const outline=roundedPath(new Shape(),2.7,2.2,.6);
+    outline.holes.push(roundedPath(new Path(),1.8,1.3,.28));
+    const geometry=new ExtrudeGeometry(outline,{depth:.22,steps:1,bevelEnabled:true,bevelSegments:4,bevelSize:.065,bevelThickness:.065,curveSegments:16});
+    geometry.translate(0,0,-.11);
+    return geometry;
+  },[]);
+  useEffect(()=>()=>geometry.dispose(),[geometry]);
+  useEffect(()=>{
+    if(paused && sculpture.current) {
+      sculpture.current.children.forEach((band,i)=>band.scale.setScalar(i===activeIndex?1.055:1));
+      invalidate();
     }
-    return new BufferGeometry().setAttribute(
-      "position",
-      new Float32BufferAttribute(positions, 3),
-    );
-  }, []);
-
-  useEffect(() => () => geometry.dispose(), [geometry]);
-
-  return (
-    <points geometry={geometry}>
-      <pointsMaterial color="#e0eece" size={0.024} transparent opacity={0.38} sizeAttenuation />
-    </points>
-  );
-}
-
-function Engine({ paused, pointer, scroll }: { paused: boolean; pointer: RefObject<Pointer>; scroll: RefObject<number> }) {
-  const sculpture = useRef<Group>(null);
-  const core = useRef<Group>(null);
-  const rings = useRef<Group>(null);
-  const satelliteOne = useRef<Mesh>(null);
-  const satelliteTwo = useRef<Mesh>(null);
-  const satelliteThree = useRef<Mesh>(null);
-  const time = useRef(0);
-
-  useFrame((_state, rawDelta) => {
-    if (paused || !sculpture.current) return;
-    const delta = Math.min(rawDelta, 0.045);
-    time.current += delta;
-    const elapsed = time.current;
-
-    sculpture.current.rotation.x = MathUtils.damp(
-      sculpture.current.rotation.x,
-      -pointer.current.y * 0.12 + Math.sin(elapsed * 0.19) * 0.04,
-      3,
-      delta,
-    );
-    sculpture.current.rotation.y = MathUtils.damp(
-      sculpture.current.rotation.y,
-      pointer.current.x * 0.2 - 0.1 + Math.sin(elapsed * 0.15) * 0.15 + scroll.current * 0.65,
-      3,
-      delta,
-    );
-    sculpture.current.position.y = Math.sin(elapsed * 0.48) * 0.065;
-    sculpture.current.rotation.z = MathUtils.damp(sculpture.current.rotation.z, scroll.current * -0.18, 4, delta);
-    if (rings.current) {
-      rings.current.children.forEach((ring, i) => {
-        const origins = [[-0.6, 0.4, 0], [0.66, 0.18, 0.08], [0.08, -0.63, 0.24]];
-        const [x, y, z] = origins[i];
-        ring.position.set(MathUtils.damp(ring.position.x, x * (1 + scroll.current * 0.45), 4, delta), MathUtils.damp(ring.position.y, y * (1 + scroll.current * 0.45), 4, delta), z);
-      });
-    }
-
-    if (core.current) {
-      core.current.rotation.y += delta * 0.22;
-      core.current.rotation.z = Math.sin(elapsed * 0.38) * 0.1;
-    }
-
-    satelliteOne.current?.position.copy(orbitPoint(elapsed * 0.2 + 0.5, 2.43, 0.6));
-    satelliteTwo.current?.position.copy(orbitPoint(elapsed * 0.2 + 3.3, 2.43, 0.6));
-    satelliteThree.current?.position.copy(orbitPoint(-elapsed * 0.14 + 1.6, 2.78, -0.9));
+  },[paused,activeIndex,invalidate]);
+  useFrame((_state,rawDelta)=>{
+    if(paused||!sculpture.current) return;
+    const delta=Math.min(rawDelta,.045); time.current+=delta;
+    const progress=scroll.current;
+    sculpture.current.rotation.x=MathUtils.damp(sculpture.current.rotation.x,-pointer.current.y*.13+Math.sin(time.current*.22)*.03,4,delta);
+    sculpture.current.rotation.y=MathUtils.damp(sculpture.current.rotation.y,pointer.current.x*.2-.12+progress*.65,4,delta);
+    sculpture.current.rotation.z=MathUtils.damp(sculpture.current.rotation.z,-progress*.15,4,delta);
+    sculpture.current.children.forEach((band,i)=>{
+      const [x,y,z]=origins[i];
+      const spread=1.08-progress*.22;
+      band.position.x=MathUtils.damp(band.position.x,x*spread,4,delta);
+      band.position.y=MathUtils.damp(band.position.y,y*spread+Math.sin(time.current*.45+i)*.035,4,delta);
+      band.position.z=z;
+      const scale=MathUtils.damp(band.scale.x,i===activeIndex?1.055:1,5,delta);band.scale.setScalar(scale);
+    });
   });
-
-  return (
-    <group ref={sculpture} scale={0.92} rotation={[0, -0.1, 0]}>
-      <Constellation />
-      <Circuit radius={2.43} inclination={0.6} />
-      <Circuit radius={2.78} inclination={-0.9} />
-
-      <group ref={rings}>
-      <group position={[-0.6, 0.4, 0]} rotation={[0.46, -0.2, -0.31]}>
-        <mesh>
-          <torusGeometry args={[1.2, 0.245, 28, 112]} />
-          <meshPhysicalMaterial
-            color="#d5f26d" roughness={0.25} metalness={0.18}
-            clearcoat={0.85} clearcoatRoughness={0.18} envMapIntensity={0.95}
-          />
-        </mesh>
-        <mesh position={[0, 0, 0.235]} rotation={[0, 0, 0.55]}>
-          <torusGeometry args={[1.2, 0.013, 8, 80, Math.PI * 0.66]} />
-          <meshBasicMaterial color="#f3ffcb" />
-        </mesh>
-      </group>
-
-      <group position={[0.66, 0.18, 0.08]} rotation={[1.06, 0.32, 0.49]}>
-        <mesh>
-          <torusGeometry args={[1.24, 0.26, 28, 112]} />
-          <meshPhysicalMaterial
-            color="#edeedd" roughness={0.2} metalness={0.32}
-            clearcoat={0.7} clearcoatRoughness={0.18} envMapIntensity={1.05}
-          />
-        </mesh>
-        <mesh position={[0, 0, 0.25]} rotation={[0, 0, 2.35]}>
-          <torusGeometry args={[1.24, 0.014, 8, 64, Math.PI * 0.55]} />
-          <meshBasicMaterial color="#ffffff" />
-        </mesh>
-      </group>
-
-      <group position={[0.08, -0.63, 0.24]} rotation={[0.2, 1.07, -0.5]}>
-        <mesh>
-          <torusGeometry args={[1.2, 0.285, 28, 112]} />
-          <meshPhysicalMaterial
-            color="#255b4a" roughness={0.19} metalness={0.45}
-            clearcoat={1} clearcoatRoughness={0.12} envMapIntensity={1.3}
-          />
-        </mesh>
-        <mesh position={[0, 0, 0.271]} rotation={[0, 0, -0.2]}>
-          <torusGeometry args={[1.2, 0.025, 8, 64, Math.PI * 0.9]} />
-          <meshStandardMaterial color="#d5f26d" emissive="#d5f26d" emissiveIntensity={0.3} />
-        </mesh>
-      </group>
-
-      </group>
-      <group ref={core} position={[0.03, 0.11, 0.55]}>
-        <mesh rotation={[0.25, 0.5, 0.3]}>
-          <icosahedronGeometry args={[0.34, 0]} />
-          <meshPhysicalMaterial
-            color="#e2ff91" metalness={0.3} roughness={0.2}
-            emissive="#d5f26d" emissiveIntensity={0.16} clearcoat={1}
-          />
-        </mesh>
-        <mesh rotation={[1.1, 0.3, -0.2]}>
-          <torusGeometry args={[0.51, 0.012, 8, 64]} />
-          <meshBasicMaterial color="#ecffd1" transparent opacity={0.75} />
-        </mesh>
-      </group>
-
-      <mesh ref={satelliteOne} position={orbitPoint(0.5, 2.43, 0.6)}>
-        <sphereGeometry args={[0.09, 20, 20]} />
-        <meshPhysicalMaterial color="#e8ffba" roughness={0.2} metalness={0.3} />
+  return <group ref={sculpture} rotation={[0,-.12,0]} scale={1.03}>
+    {origins.map(([x,y,z],i)=><group key={i} position={[x,y,z]} rotation={turns[i]}>
+      <mesh geometry={geometry}>
+        <meshPhysicalMaterial color={finishes[i]} roughness={i===2?.24:.2} metalness={i===0?.25:.65} clearcoat={.85} clearcoatRoughness={.15} envMapIntensity={1.1} emissive={i===activeIndex?'#748c32':'#000000'} emissiveIntensity={.055}/>
       </mesh>
-      <mesh ref={satelliteTwo} position={orbitPoint(3.3, 2.43, 0.6)}>
-        <sphereGeometry args={[0.06, 16, 16]} />
-        <meshBasicMaterial color="#d5f26d" />
-      </mesh>
-      <mesh ref={satelliteThree} position={orbitPoint(1.6, 2.78, -0.9)}>
-        <octahedronGeometry args={[0.12, 0]} />
-        <meshPhysicalMaterial color="#eef3df" metalness={0.35} roughness={0.22} />
-      </mesh>
-    </group>
-  );
+    </group>)}
+  </group>;
 }
 
-export default function Scene({ paused, onFailure }: SceneProps) {
+export default function Scene({ paused, activeIndex, onFailure }: SceneProps) {
   const pointer = useRef<Pointer>({ x: 0, y: 0 });
   const host = useRef<HTMLDivElement>(null);
   const scroll = useRef(0);
@@ -298,6 +175,15 @@ export default function Scene({ paused, onFailure }: SceneProps) {
     failureCallback.current?.();
   }, []);
 
+  useEffect(() => {
+    try {
+      const probe=document.createElement('canvas');
+      const context=probe.getContext('webgl2');
+      if(!context) handleFailure();
+      context?.getExtension('WEBGL_lose_context')?.loseContext();
+    } catch { handleFailure(); }
+  },[handleFailure]);
+
   return (
     <div
       ref={host}
@@ -318,20 +204,20 @@ export default function Scene({ paused, onFailure }: SceneProps) {
       {!failed && (
         <SceneBoundary onFailure={handleFailure}>
           <Canvas
-            camera={{ position: [0, 0, 8.4], fov: 38, near: 0.1, far: 40 }}
+            camera={{ position: [0, 0, 8.2], fov: 38, near: 0.1, far: 40 }}
             dpr={[1, 1.5]}
             frameloop={paused ? "demand" : "always"}
             gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
             style={{ touchAction: "pan-y" }}
             fallback={<span>Your browser does not support the interactive 3D scene.</span>}
             onCreated={({ gl }) => {
-              gl.setClearColor("#102a25", 0);
+              gl.setClearColor("#101913", 0);
               gl.toneMapping = ACESFilmicToneMapping;
               gl.toneMappingExposure = 1.08;
             }}
           >
             <Studio onFailure={handleFailure} />
-            <Engine paused={paused} pointer={pointer} scroll={scroll} />
+            <Engine paused={paused} pointer={pointer} scroll={scroll} activeIndex={activeIndex} />
           </Canvas>
         </SceneBoundary>
       )}

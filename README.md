@@ -18,7 +18,7 @@ Preview at http://127.0.0.1:4173/ian-gutierrez-portfolio/ . The build uses Next�
 
 - `next-site/components/Portfolio.tsx`: homepage content and accessible interactions.
 - `next-site/components/Scene.tsx`: isolated R3F sculpture, demand rendering when paused, offscreen or reduced motion; WebGL fallback.
-- `next-site/app/globals.css`, `motion.css`: responsive visual system and motion.
+- `next-site/app/globals.css`, `motion.css`: consolidated dark visual system and motion.
 - `case-studies/`: all fourteen preserved project URLs, with `styles.css` and `editorial.css`.
 - `script.js`: image viewer and interactions for case studies and policy pages.
 - `projects/`, `credentials/`, `logos/`, portrait files: user-approved evidence and images.
@@ -40,4 +40,4 @@ All critical content is prerendered HTML. Navigation, project links and contact 
 
 ## Design direction
 
-Warm paper, forest, and lime. An immersive connected-system sculpture introduces the services; actual project screenshots, portraits, company logos, and credential artwork provide the evidence. Typography, responsive hierarchy, purposeful motion, and touch/keyboard behavior were refined using Impeccable, design-taste-frontend, and Emil Kowalski’s design/animation guidance. These authoring skills are installed in the local Codex skills folder and are not website runtime dependencies.
+Near-black, warm white, and acid lime. An interactive connected-system sculpture links applications, automation, and intelligence to actual case studies; actual project screenshots, portraits, company logos, and credential artwork provide the evidence. Typography, responsive hierarchy, purposeful motion, and touch/keyboard behavior were refined using Impeccable, design-taste-frontend, and Emil Kowalski’s design/animation guidance. These authoring skills are installed in the local Codex skills folder and are not website runtime dependencies.

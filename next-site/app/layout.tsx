@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 };
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
   const base = process.env.NEXT_PUBLIC_BASE_PATH || '/ian-gutierrez-portfolio';
-  return <html lang="en"><head><link rel="stylesheet" href={`${base}/fonts/fonts.css`} /><link rel="preload" as="font" type="font/woff2" crossOrigin="anonymous" href={`${base}/fonts/manrope-latin.woff2`} /><link rel="icon" href={`${base}/favicon.svg`} /><meta name="theme-color" content="#f2f1eb" /></head><body>{children}<Script src={`${base}/analytics.js`} strategy="afterInteractive" /></body></html>;
+  return <html lang="en"><head><link rel="stylesheet" href={`${base}/fonts/fonts.css`} /><link rel="preload" as="font" type="font/woff2" crossOrigin="anonymous" href={`${base}/fonts/manrope-latin.woff2`} /><link rel="icon" href={`${base}/favicon.svg`} /><meta name="theme-color" content="#0b100f" /></head><body>{children}<Script src={`${base}/analytics.js`} strategy="afterInteractive" /></body></html>;
 }
