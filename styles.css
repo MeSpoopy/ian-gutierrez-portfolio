@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('fonts/fonts.css');
 :root { color-scheme:dark; --bg:#10131c; --surface:#1a1f2c; --text:#f6f7fc; --muted:#b2b9cd; --line:#333b4e; --accent:#c8bdff; --button-text:#1c163a; --body:'DM Sans',Arial,sans-serif; --display:'Manrope',Arial,sans-serif; --mono:Consolas,monospace; --gutter:clamp(1.25rem,4.8vw,5rem); }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; scroll-padding-top:7rem; }

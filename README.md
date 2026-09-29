@@ -1,40 +1,43 @@
-# Ian Van Anthony Gutierrez — Portfolio
+# Ian Gutierrez — Portfolio
 
-A static portfolio featuring Zoho development, business automation, product design, professional experience, and fourteen project case studies.
+A Next.js 16 and React 19 portfolio with a React Three Fiber / Three.js interactive hero, fourteen evidence-led case studies, professional experience, and credentials. Published on GitHub Pages from the root of `codex/github-pages`.
 
-## Website
+## Edit and build
 
-Published with GitHub Pages from the root of the codex/github-pages branch. All links and assets use relative paths so the site also works under a repository URL.
+Homepage source is in `next-site/`. Do not manually edit the generated root `index.html` or `_next/` assets.
 
-## Local preview
+```sh
+cd next-site
+npm ci
+npm run build
+npm run publish:static
+python scripts/preview.py
+```
 
-Run python -m http.server 4173 from this folder, then open http://127.0.0.1:4173/.
+Preview at http://127.0.0.1:4173/ian-gutierrez-portfolio/ . The build uses Next’s static export and the repository base path `/ian-gutierrez-portfolio`. The publishing script copies the export to the repository root without removing case studies or public assets. Commit that output with its source, then push the publishing branch.
 
-## Editing
+- `next-site/components/Portfolio.tsx`: homepage content and accessible interactions.
+- `next-site/components/Scene.tsx`: isolated R3F sculpture, demand rendering when paused, offscreen or reduced motion; WebGL fallback.
+- `next-site/app/globals.css`, `motion.css`: responsive visual system and motion.
+- `case-studies/`: all fourteen preserved project URLs, with `styles.css` and `editorial.css`.
+- `script.js`: image viewer and interactions for case studies and policy pages.
+- `projects/`, `credentials/`, `logos/`, portrait files: user-approved evidence and images.
+- `fonts/`: self-hosted DM Sans and Manrope with OFL licenses.
 
-- index.html: homepage, experience, education, recognitions, and contact details.
-- case-studies/: fourteen individual project pages.
-- styles.css: responsive layout and styling.
-- script.js: accessible image previews and footer year.
-- projects/ and credentials/: supporting screenshots.
+The three featured projects and the first five additional projects are Zoho work. AI Resume Analyzer remains labeled as a proposed application. No invented impact metrics are added. The source document screenshot containing private webhook credentials is excluded from public assets.
 
-The public portfolio requires no build step. The private Admin service runs separately on Cloudflare Workers. Commit updates to the publishing branch to update the live site.
+## Accessibility and motion
 
-The case studies distinguish demonstrated interfaces and workflows from unverified outcomes. Original documents and private hosting configuration are not included.
+All critical content is prerendered HTML. Navigation, project links and contact links work without WebGL. The sculpture has a pause control, follows reduced-motion preferences, and stops while offscreen or the page is hidden. Fine-pointer hover motion, immediate keyboard states, native disclosures, focus-visible styling, a named native image dialog with Escape/focus return and zoom, and responsive layouts are included. The no-WebGL fallback uses CSS geometry.
 
-Visual inspiration: [Videaste on Dribbble](https://dribbble.com/shots/23090247-Videaste-Personal-Videographer-Portfolio-Landing-Page-Website).
+## Private Admin and analytics
 
-## Policies and owner analytics
+- `admin.html` remains the public entry to the separately authenticated Cloudflare Worker at https://ian-portfolio-admin.ianvananthony2000.workers.dev/ . No credentials or private statistics are embedded here.
+- `analytics.js` loads the public Cloudflare beacon only on the production portfolio host/path. Local previews and Admin are excluded.
+- Cloudflare reports visits/page views and approximate countries, not exact unique people or GPS. Reporting began on 13 September 2026.
+- `terms.html` and `privacy.html` describe the portfolio’s data practices. Fonts are served by GitHub Pages with the website.
+- Keep Cloudflare API tokens, authentication configuration, and source documents out of this repository.
 
-- terms.html and privacy.html describe the portfolio and its current data practices.
-- admin.html is a public entry page linking to the authenticated Cloudflare dashboard, not an authentication boundary. No private statistics or login credentials are embedded.
-- analytics.js loads the official Cloudflare module on the production hostname and portfolio path only. It is included on the home page, fourteen case studies, and two policy pages. The Admin page and local previews are excluded.
-- The beacon identifier is public by design. Never add Cloudflare API tokens or account passwords to this repository.
-- Reporting began on 13 September 2026. Cloudflare reports visits and page views, not exact unique people. Location is approximate country, not GPS or city.
-- Dashboard data is protected by server-side Admin authentication on Cloudflare Workers. Hosting remains on GitHub Pages.
-- If other projects are later connected to this same analytics site, filter paths to /ian-gutierrez-portfolio/ when viewing reports.
-- Keep the privacy policy synchronized with any tracking changes. To disable collection, remove the analytics.js script includes from public pages and update the policy.
+## Design direction
 
-Provider documentation: https://developers.cloudflare.com/web-analytics/
-
-Work begins with eight Zoho projects. The AI Resume Analyzer is presented as a proposed application. Case Study 2 Improved supplies five new studies, revised partner lookup content, and supporting images; its credential-bearing configuration screenshot is excluded from public assets.
+Warm paper, forest, and lime. An immersive connected-system sculpture introduces the services; actual project screenshots, portraits, company logos, and credential artwork provide the evidence. Typography, responsive hierarchy, purposeful motion, and touch/keyboard behavior were refined using Impeccable, design-taste-frontend, and Emil Kowalski’s design/animation guidance. These authoring skills are installed in the local Codex skills folder and are not website runtime dependencies.

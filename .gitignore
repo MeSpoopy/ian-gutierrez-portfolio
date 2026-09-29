@@ -1,0 +1,6 @@
+next-site/node_modules/
+next-site/.next/
+next-site/out/
+next-site/.tools/
+next-site/next-env.d.ts
+next-site/tsconfig.tsbuildinfo
