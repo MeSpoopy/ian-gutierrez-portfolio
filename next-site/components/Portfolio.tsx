@@ -86,13 +86,13 @@ export default function Portfolio(){
  <a className="skip-link" href="#main">Skip to content</a><a className="skip-link skip-projects" href="#work">Skip to projects</a>
  <header className="navigation" onKeyDown={e=>{if(e.key==='Escape'){setMenu(false);document.getElementById('menu-toggle')?.focus()}}}><a className="brand" href="#top" aria-label="Ian Gutierrez home">ian<span>.</span></a><button className="menu-toggle" id="menu-toggle" aria-controls="main-nav" aria-label={menu?'Close navigation':'Open navigation'} aria-expanded={menu} onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button><nav id="main-nav" className={menu?'nav-links is-open':'nav-links'} aria-label="Main navigation"><a href="#work" onClick={()=>setMenu(false)}>Work</a><a href="#about" onClick={()=>setMenu(false)}>About</a><a href="#recognition" onClick={()=>setMenu(false)}>Credentials</a><a className="nav-cta" href="#contact" onClick={()=>setMenu(false)}>Let’s talk <ArrowUpRight size={17}/></a></nav></header>
  <main id="main">
+ <div className="hero-restored">
  <section className="hero wrap" id="top">
-  <div className="hero-topline"><span>Ian Van Anthony Gutierrez</span><span>Solutions developer & project manager</span></div>
+  <div className="hero-topline"><span>IAN VAN ANTHONY GUTIERREZ</span><span>SOLUTIONS DEVELOPER &amp; PROJECT MANAGER</span></div>
   <div className="hero-grid">
     <div className="hero-copy">
       <h1>Complex work.<br/><span>Connected.</span></h1>
-      <p className="hero-services">Zoho applications, automation &amp; integrations</p>
-      <p className="hero-intro">I build the applications and workflows that help your team turn business data into useful action.</p>
+      <p className="hero-intro">I build Zoho applications, automate workflows, and connect the systems your team depends on.</p>
       <div className="hero-buttons"><a className="button dark" href="#work">Explore my work <ArrowDown size={18}/></a><a className="under-link" href="#contact">Let’s talk <ArrowUpRight size={18}/></a></div>
       <div className="system-explorer"><div className="system-controls" role="group" aria-label="Explore my capabilities">{systems.map((s,i)=><button key={s.title} aria-pressed={activeSystem===i} aria-controls="system-detail" onClick={()=>setActiveSystem(i)}>{s.title}</button>)}</div><div className="system-detail" id="system-detail" aria-live="polite"><p>{systems[activeSystem].text}</p><a href={asset('case-studies/'+systems[activeSystem].slug+'.html')}>{systems[activeSystem].project}<ArrowUpRight size={16}/></a></div></div>
     </div>
@@ -104,10 +104,11 @@ export default function Portfolio(){
         else{setStill(true);setMotionOptIn(false)}
       }} aria-label={showStill?'Enable 3D motion':'Show still artwork'} aria-pressed={!showStill} disabled={failed} title={failed?'Still artwork is available because 3D could not load':undefined}>{failed?'Still artwork':showStill?'Enable 3D':'Still artwork'}<Layers3 size={14}/></button>{!showStill&&<button onClick={()=>setPaused(!paused)} aria-label={paused?'Resume motion':'Pause motion'} aria-pressed={paused}>{paused?<Play size={14}/>:<Pause size={14}/>}<span>{paused?'Resume':'Pause'}</span></button>}</div></div>
     </div>
-    <a className="hero-proof" href={asset('case-studies/vendor-map.html')}><span className="proof-intro">Vendor map<small>CRM records, searchable by location.</small></span><span className="proof-project"><img src={asset('projects/vendor-map.jpg')} alt="Vendor map showing CRM vendors by location" width="1024" height="641"/><span>View case study <ArrowUpRight size={18}/></span></span></a>
   </div>
-  <div className="hero-foot"><span>Cagayan de Oro, Philippines</span><span>Applications <i/> Automation <i/> Intelligence</span><a href="#work" aria-label="Explore selected work"><ArrowDown size={18}/></a></div>
+  <div className="hero-foot"><span>BASED IN CAGAYAN DE ORO, PHILIPPINES</span><span>ZOHO DEVELOPMENT <i/> AUTOMATION <i/> DIGITAL EXPERIENCES</span><a href="#work" aria-label="Explore selected work"><ArrowDown size={18}/></a></div>
 </section>
+<div className="experience-strip"><div className="wrap strip-inner"><span>BUILT THROUGH<br/><strong>REAL EXPERIENCE.</strong></span>{[['rg26.jpg','RG26 Technologies','SOLUTIONS & TECHNOLOGY'],['briteph.jpg','BritePH','DESIGN & AUTOMATION'],['msu-iit.jpg','MSU–IIT','INFORMATION TECHNOLOGY']].map(([logo,name,role])=><div key={name}><img src={asset('logos/'+logo)} width="36" height="36" alt=""/><span><strong>{name}</strong><small>{role}</small></span></div>)}</div></div>
+</div>
 <section className="section wrap selected-work" id="work">
   <div className="work-intro"><h2>Selected work.<br/><span>Built around real needs.</span></h2><p>Location search, lead delivery, and contract updates—three ways I’ve worked with Zoho systems.</p></div>
   <article className="project-chapter map-chapter" aria-labelledby="map-title">

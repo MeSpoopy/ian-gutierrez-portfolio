@@ -323,3 +323,83 @@
  .award-top,.award-bottom{font-size:13px}
  .footer nav{flex-wrap:wrap;gap:12px 24px;justify-content:flex-start}
 }
+
+/* Restore the original hero reference within its own dark-green palette. */
+.hero-restored {
+ --paper:#0b100f; --ink:#eef2e8; --forest:#121d16; --lime:#d5f26d;
+ --line:#334139; --muted:#abb8ad; --surface:#141d19; --raised:#1d2922;
+ --on-accent:#11190c; --primary:#d5f26d; --primary-hover:#e5ffa0;
+ --body-ink:#bdc8ba; --control-line:#718368;
+ background:var(--paper); color:var(--ink);
+}
+.hero-restored .hero { padding-top:30px; }
+.hero-restored .hero-topline { font-size:11px; letter-spacing:.7px; }
+.hero-restored .hero-topline span:first-child { color:var(--muted); }
+.hero-restored .hero-grid { grid-template-columns:minmax(0,1fr) minmax(0,1.12fr); align-items:center; gap:12px; min-height:560px; }
+.hero-restored .hero-copy { padding:45px 0 18px; }
+.hero-restored .hero h1 { font-size:clamp(58px,6.8vw,96px); line-height:1.02; }
+.hero-restored .hero-intro { font-size:17px; line-height:1.7; max-width:410px; margin-top:26px; }
+.hero-restored .hero-buttons { gap:26px; margin-top:30px; }
+.hero-restored .button.dark:hover { background:var(--primary-hover); }
+.hero-restored .under-link { border-color:#788872; }
+.hero-restored .under-link:hover { border-color:var(--lime); }
+.hero-restored .system-explorer { margin-top:34px; max-width:430px; }
+.hero-restored .system-detail { padding-top:13px; min-height:78px; }
+.hero-restored .engine { min-height:560px; }
+.hero-restored .canvas-wrap { inset:-30px -35px 0 -40px; }
+.hero-restored .engine-caption { bottom:16px; left:15px; }
+.hero-restored .engine-fallback span:nth-child(2) { border-color:#e3e9df; }
+.hero-restored .engine-fallback span:nth-child(3) { border-color:#496b57; }
+.hero-restored .hero-foot { padding:25px 0 30px; font-size:11px; letter-spacing:.5px; }
+.hero-restored .hero-foot i { background:#879779; }
+.hero-restored .experience-strip { background:#101612; border-color:var(--line); }
+.hero-restored .strip-inner { padding-block:27px; }
+.hero-restored .strip-inner>span { font-size:11px; }
+.hero-restored .strip-inner>span strong { font-size:12px; }
+.hero-restored .strip-inner img { width:36px; height:36px; }
+.hero-restored .strip-inner strong { font-size:15px; color:var(--ink); }
+.hero-restored .strip-inner small { font-size:11px; letter-spacing:.4px; }
+@media(min-width:1500px) {
+ .hero-restored .hero-grid,.hero-restored .engine { min-height:650px; }
+ .hero-restored .hero-copy { padding-top:20px; }
+}
+@media(max-width:1100px) {
+ .hero-restored .hero h1 { font-size:clamp(57px,6.8vw,78px); }
+ .hero-restored .hero-intro { font-size:16px; max-width:350px; }
+ .hero-restored .hero-buttons { gap:20px; }
+ .hero-restored .engine-caption { left:0; }
+}
+@media(max-width:800px) {
+ .hero-restored .hero-grid { grid-template-columns:minmax(0,1fr) minmax(0,1fr); min-height:520px; }
+ .hero-restored .hero-copy { padding-block:30px 10px; }
+ .hero-restored .hero h1 { font-size:clamp(46px,6.5vw,61px); }
+ .hero-restored .hero-intro { margin-top:20px; }
+ .hero-restored .hero-buttons { gap:18px; }
+ .hero-restored .system-explorer { margin-top:25px; }
+ .hero-restored .system-detail { min-height:90px; }
+ .hero-restored .engine { min-height:510px; }
+ .hero-restored .canvas-wrap { inset:5px -10px 60px -20px; }
+ .hero-restored .engine-caption { left:20px; bottom:15px; }
+ .hero-restored .strip-inner strong { font-size:14px; }
+ .hero-restored .strip-inner small { font-size:12px; }
+}
+@media(max-width:600px) {
+ .hero-restored .hero-topline { font-size:11px; line-height:1.5; }
+ .hero-restored .hero-grid { grid-template-columns:minmax(0,1fr); gap:0; min-height:0; }
+ .hero-restored .hero-copy { padding:25px 0 0; }
+ .hero-restored .hero h1 { font-size:clamp(43px,10.7vw,64px); }
+ .hero-restored .hero-intro { max-width:370px; }
+ .hero-restored .hero-buttons { gap:14px 22px; margin-top:24px; }
+ .hero-restored .system-explorer { max-width:none; }
+ .hero-restored .system-detail { min-height:69px; }
+ .hero-restored .engine { min-height:380px; }
+ .hero-restored .canvas-wrap { inset:-40px -10px 30px; }
+ .hero-restored .engine-caption { left:0; right:0; bottom:0; }
+ .hero-restored .hero-foot { padding-top:28px; font-size:12px; }
+}
+@media(max-width:360px) {
+ .hero-restored .hero h1 { font-size:43px; }
+ .hero-restored .engine { min-height:330px; }
+ .hero-restored .engine-caption { gap:10px; }
+ .hero-restored .engine-actions button { padding-inline:4px; }
+}

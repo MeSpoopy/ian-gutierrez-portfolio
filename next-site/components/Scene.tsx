@@ -85,10 +85,10 @@ function Studio({ onFailure }: { onFailure: () => void }) {
   return (
     <>
       <ambientLight intensity={0.32} />
-      <hemisphereLight args={["#E8F1F8", "#18222D", 1.3]} />
-      <directionalLight position={[-3, 5, 5]} color="#F0F4F7" intensity={3.2} />
-      <directionalLight position={[4, 1, -2]} color="#6E9FC7" intensity={2.5} />
-      <pointLight position={[-3, -2, 2]} color="#B8C3CC" intensity={12} />
+      <hemisphereLight args={["#edffe0", "#102a25", 1.3]} />
+      <directionalLight position={[-3, 5, 5]} color="#f7ffdd" intensity={3.2} />
+      <directionalLight position={[4, 1, -2]} color="#d5f26d" intensity={2.5} />
+      <pointLight position={[-3, -2, 2]} color="#c7dfc2" intensity={12} />
     </>
   );
 }
@@ -104,7 +104,7 @@ function roundedPath<T extends Shape | Path>(path: T, w: number, h: number, r: n
 
 const origins = [[-0.64,0.39,0], [0.72,0.18,0.09], [0.03,-0.6,0.28]];
 const turns:[number,number,number][] = [[0.22,-0.25,-0.26], [1.14,0.18,0.44], [0.12,1.12,-0.5]];
-const finishes = ['#6E9FC7','#F0F4F7','#486B88'];
+const finishes = ['#d5f26d','#e3e9df','#496b57'];
 const settleThreshold = 0.0001;
 
 function Engine({paused,pointer,activeIndex}:{paused:boolean;pointer:RefObject<Pointer>;activeIndex:number}) {
@@ -155,10 +155,10 @@ function Engine({paused,pointer,activeIndex}:{paused:boolean;pointer:RefObject<P
     // Demand rendering stops completely once the requested view has settled.
     if(moving) invalidate();
   });
-  return <group ref={sculpture} rotation={[0,-.12,0]} scale={0.94}>
-    {origins.map(([x,y,z],i)=><group key={i} position={[x,y,z]} rotation={turns[i]}>
+  return <group ref={sculpture} rotation={[0,-.12,0]} scale={1.03}>
+    {origins.map(([x,y,z],i)=><group key={i} position={[x*1.08,y*1.08,z]} rotation={turns[i]}>
       <mesh geometry={geometry}>
-        <meshPhysicalMaterial ref={material=>{materials.current[i]=material}} color={finishes[i]} roughness={i===2?.24:.2} metalness={i===0?.25:.65} clearcoat={.85} clearcoatRoughness={.15} envMapIntensity={1.1} emissive="#486B88" emissiveIntensity={0}/>
+        <meshPhysicalMaterial ref={material=>{materials.current[i]=material}} color={finishes[i]} roughness={i===2?.24:.2} metalness={i===0?.25:.65} clearcoat={.85} clearcoatRoughness={.15} envMapIntensity={1.1} emissive="#748c32" emissiveIntensity={0}/>
       </mesh>
     </group>)}
   </group>;
