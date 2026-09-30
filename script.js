@@ -1,7 +1,7 @@
 const year = document.getElementById('year');
 if (year) year.textContent = new Date().getFullYear();
 
-// All content is visible by default; motion only enhances elements entering view.
+// Content is visible immediately; optional dialog feedback respects reduced motion.
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const activeMotion = new Map();
 function playMotion(element, frames, options = {}) {
@@ -24,88 +24,6 @@ document.addEventListener('focusin', event => cancelMotionWithin(event.target));
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) cancelMotionWithin();
 });
-
-if ('IntersectionObserver' in window && typeof Element.prototype.animate === 'function') {
-  const seen = new WeakSet();
-  const wordGroups = new WeakMap();
-  const headings = '.hero h1,.section h2,.case-heading h1';
-  const groups = '.project-grid,.recognition-grid,.certificate-grid,.delivery-steps,.proof-strip,.case-facts';
-  const targets = [...document.querySelectorAll(headings + ',.hero-eyebrow,.hero-role,.hero-description,.hero-actions,.hero-specialties,.hero-portrait,.visual-note,.proof-strip>div,.project-card,.recognition-card,.certificate-card,.about-portrait,.about-bio>p,.delivery-steps li,.case-facts>div,.case-narrative section,.evidence-gallery figure')];
-
-  function headingWords(heading) {
-    if (wordGroups.has(heading)) return wordGroups.get(heading);
-    const words = [];
-    const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT, {
-      acceptNode: node => node.textContent.trim() && !node.parentElement.closest('a,[aria-hidden="true"]')
-        ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
-    });
-    const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach(node => {
-      const fragment = document.createDocumentFragment();
-      node.textContent.split(/(\s+)/).forEach(part => {
-        if (!part || /^\s+$/.test(part)) { fragment.append(part); return; }
-        const mask = document.createElement('span');
-        const word = document.createElement('span');
-        mask.className = 'motion-word';
-        word.className = 'motion-word-inner';
-        word.textContent = part;
-        mask.append(word);
-        fragment.append(mask);
-        words.push(word);
-      });
-      node.replaceWith(fragment);
-    });
-    wordGroups.set(heading, words);
-    return words;
-  }
-  function reveal(element) {
-    seen.add(element);
-    if (element.contains(document.activeElement)) return;
-    if (element.matches(headings)) {
-      headingWords(element).forEach((word, index) => playMotion(word, [
-        { opacity: .15, transform: 'translateY(105%)' },
-        { opacity: 1, transform: 'translateY(0)' }
-      ], { duration: 620, delay: Math.min(index * 45, 225) }));
-      return;
-    }
-    let delay = 0;
-    if (element.parentElement.matches(groups)) delay = ([...element.parentElement.children].indexOf(element) % 3) * 80;
-    if (element.matches('.hero-role,.hero-description,.hero-actions,.hero-specialties')) {
-      delay = ['hero-role','hero-description','hero-actions','hero-specialties'].indexOf(element.className) * 70 + 100;
-    }
-    playMotion(element, [
-      { opacity: .15, translate: '0 22px' },
-      { opacity: 1, translate: '0 0' }
-    ], { delay, duration: element.matches('.hero-portrait') ? 850 : 650 });
-  }
-  const entranceObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting || motionPreference.matches) return;
-      entranceObserver.unobserve(entry.target);
-      if (!seen.has(entry.target)) reveal(entry.target);
-    });
-  }, { rootMargin: '0px 0px -35px 0px', threshold: .08 });
-  function observeEntrances() {
-    if (motionPreference.matches) return;
-    targets.forEach(element => {
-      if (seen.has(element)) return;
-      const rect = element.getBoundingClientRect();
-      if (rect.bottom <= 0) seen.add(element);
-      else entranceObserver.observe(element);
-    });
-  }
-  observeEntrances();
-  const orbit = document.querySelector('.hero-orbit');
-  if (orbit && orbit.getBoundingClientRect().bottom > 0) playMotion(orbit, [
-    { opacity: 0, transform: 'rotate(-30deg) scale(.94)' },
-    { opacity: 1, transform: 'rotate(-16deg) scale(1)' }
-  ], { duration: 1400 });
-  motionPreference.addEventListener('change', event => {
-    if (event.matches) { entranceObserver.disconnect(); cancelMotionWithin(); }
-    else observeEntrances();
-  });
-}
 
 // A lightweight reading indicator follows native scrolling, including disclosure changes.
 const header = document.querySelector('.site-header');
