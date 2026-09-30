@@ -324,12 +324,8 @@
  .footer nav{flex-wrap:wrap;gap:12px 24px;justify-content:flex-start}
 }
 
-/* Restore the original hero reference within its own dark-green palette. */
+/* Keep the restored hero layout within the site's navy and soft-blue theme. */
 .hero-restored {
- --paper:#0b100f; --ink:#eef2e8; --forest:#121d16; --lime:#d5f26d;
- --line:#334139; --muted:#abb8ad; --surface:#141d19; --raised:#1d2922;
- --on-accent:#11190c; --primary:#d5f26d; --primary-hover:#e5ffa0;
- --body-ink:#bdc8ba; --control-line:#718368;
  background:var(--paper); color:var(--ink);
 }
 .hero-restored .hero { padding-top:30px; }
@@ -341,18 +337,18 @@
 .hero-restored .hero-intro { font-size:17px; line-height:1.7; max-width:410px; margin-top:26px; }
 .hero-restored .hero-buttons { gap:26px; margin-top:30px; }
 .hero-restored .button.dark:hover { background:var(--primary-hover); }
-.hero-restored .under-link { border-color:#788872; }
+.hero-restored .under-link { border-color:var(--control-line); }
 .hero-restored .under-link:hover { border-color:var(--lime); }
 .hero-restored .system-explorer { margin-top:34px; max-width:430px; }
 .hero-restored .system-detail { padding-top:13px; min-height:78px; }
 .hero-restored .engine { min-height:560px; }
 .hero-restored .canvas-wrap { inset:-30px -35px 0 -40px; }
 .hero-restored .engine-caption { bottom:16px; left:15px; }
-.hero-restored .engine-fallback span:nth-child(2) { border-color:#e3e9df; }
-.hero-restored .engine-fallback span:nth-child(3) { border-color:#496b57; }
+.hero-restored .engine-fallback span:nth-child(2) { border-color:var(--ink); }
+.hero-restored .engine-fallback span:nth-child(3) { border-color:#486B88; }
 .hero-restored .hero-foot { padding:25px 0 30px; font-size:11px; letter-spacing:.5px; }
-.hero-restored .hero-foot i { background:#879779; }
-.hero-restored .experience-strip { background:#101612; border-color:var(--line); }
+.hero-restored .hero-foot i { background:var(--muted); }
+.hero-restored .experience-strip { background:var(--forest); border-color:var(--line); }
 .hero-restored .strip-inner { padding-block:27px; }
 .hero-restored .strip-inner>span { font-size:11px; }
 .hero-restored .strip-inner>span strong { font-size:12px; }
